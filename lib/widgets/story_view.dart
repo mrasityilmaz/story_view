@@ -32,6 +32,7 @@ class StoryItem {
   /// is because the next item to be displayed is taken by the last unshown
   /// story item.
   bool shown;
+  final String storyID;
   final Widget header;
   final Widget? footer;
 
@@ -39,6 +40,7 @@ class StoryItem {
   final Widget view;
   StoryItem(
     this.view, {
+    required this.storyID,
     required this.header,
     this.footer,
     required this.duration,
@@ -53,18 +55,18 @@ class StoryItem {
   ///
   /// Works for inline and full-page stories. See [StoryView.inline] for more on
   /// what inline/full-page means.
-  static StoryItem text({
-    required String title,
-    required Color backgroundColor,
-    Key? key,
-    TextStyle? textStyle,
-    bool shown = false,
-    bool roundedTop = false,
-    bool roundedBottom = false,
-    required Widget header,
-    Widget? footer,
-    Duration? duration,
-  }) {
+  static StoryItem text(
+      {required String title,
+      required Color backgroundColor,
+      Key? key,
+      TextStyle? textStyle,
+      bool shown = false,
+      bool roundedTop = false,
+      bool roundedBottom = false,
+      required Widget header,
+      Widget? footer,
+      Duration? duration,
+      required String storyID}) {
     double contrast = ContrastHelper.contrast([
       backgroundColor.red,
       backgroundColor.green,
@@ -104,6 +106,7 @@ class StoryItem {
         ),
         //color: backgroundColor,
       ),
+      storyID: storyID,
       header: header,
       footer: footer,
       shown: shown,
@@ -113,18 +116,18 @@ class StoryItem {
 
   /// Factory constructor for page images. [controller] should be same instance as
   /// one passed to the `StoryView`
-  factory StoryItem.pageImage({
-    required String url,
-    required StoryController controller,
-    required Widget header,
-    Widget? footer,
-    Key? key,
-    BoxFit imageFit = BoxFit.fitWidth,
-    String? caption,
-    bool shown = false,
-    Map<String, dynamic>? requestHeaders,
-    Duration? duration,
-  }) {
+  factory StoryItem.pageImage(
+      {required String url,
+      required StoryController controller,
+      required Widget header,
+      Widget? footer,
+      Key? key,
+      BoxFit imageFit = BoxFit.fitWidth,
+      String? caption,
+      bool shown = false,
+      Map<String, dynamic>? requestHeaders,
+      Duration? duration,
+      required String storyID}) {
     return StoryItem(
       Container(
         key: key,
@@ -166,6 +169,7 @@ class StoryItem {
           ],
         ),
       ),
+      storyID: storyID,
       header: header,
       footer: footer,
       shown: shown,
@@ -175,20 +179,20 @@ class StoryItem {
 
   /// Shorthand for creating inline image. [controller] should be same instance as
   /// one passed to the `StoryView`
-  factory StoryItem.inlineImage({
-    required String url,
-    Text? caption,
-    required StoryController controller,
-    Key? key,
-    required Widget header,
-    Widget? footer,
-    BoxFit imageFit = BoxFit.cover,
-    Map<String, dynamic>? requestHeaders,
-    bool shown = false,
-    bool roundedTop = true,
-    bool roundedBottom = false,
-    Duration? duration,
-  }) {
+  factory StoryItem.inlineImage(
+      {required String url,
+      Text? caption,
+      required StoryController controller,
+      Key? key,
+      required Widget header,
+      Widget? footer,
+      BoxFit imageFit = BoxFit.cover,
+      Map<String, dynamic>? requestHeaders,
+      bool shown = false,
+      bool roundedTop = true,
+      bool roundedBottom = false,
+      Duration? duration,
+      required String storyID}) {
     return StoryItem(
       ClipRRect(
         key: key,
@@ -224,6 +228,7 @@ class StoryItem {
           bottom: Radius.circular(roundedBottom ? 8 : 0),
         ),
       ),
+      storyID: storyID,
       header: header,
       footer: footer,
       shown: shown,
@@ -233,18 +238,17 @@ class StoryItem {
 
   /// Shorthand for creating page video. [controller] should be same instance as
   /// one passed to the `StoryView`
-  factory StoryItem.pageVideo(
-    String url, {
-    required StoryController controller,
-    Key? key,
-    Duration? duration,
-    required Widget header,
-    Widget? footer,
-    BoxFit imageFit = BoxFit.fitWidth,
-    String? caption,
-    bool shown = false,
-    Map<String, dynamic>? requestHeaders,
-  }) {
+  factory StoryItem.pageVideo(String url,
+      {required StoryController controller,
+      Key? key,
+      Duration? duration,
+      required Widget header,
+      Widget? footer,
+      BoxFit imageFit = BoxFit.fitWidth,
+      String? caption,
+      bool shown = false,
+      Map<String, dynamic>? requestHeaders,
+      required String storyID}) {
     return StoryItem(
         Container(
           key: key,
@@ -277,6 +281,7 @@ class StoryItem {
             ],
           ),
         ),
+        storyID: storyID,
         header: header,
         footer: footer,
         shown: shown,
@@ -286,16 +291,8 @@ class StoryItem {
   /// Shorthand for creating a story item from an image provider such as `AssetImage`
   /// or `NetworkImage`. However, the story continues to play while the image loads
   /// up.
-  factory StoryItem.pageProviderImage(
-    ImageProvider image, {
-    Key? key,
-    BoxFit imageFit = BoxFit.fitWidth,
-    String? caption,
-    required Widget header,
-    Widget? footer,
-    bool shown = false,
-    Duration? duration,
-  }) {
+  factory StoryItem.pageProviderImage(ImageProvider image,
+      {Key? key, BoxFit imageFit = BoxFit.fitWidth, String? caption, required Widget header, Widget? footer, bool shown = false, Duration? duration, required String storyID}) {
     return StoryItem(
         Container(
           key: key,
@@ -339,6 +336,7 @@ class StoryItem {
             ],
           ),
         ),
+        storyID: storyID,
         header: header,
         footer: footer,
         shown: shown,
@@ -348,17 +346,8 @@ class StoryItem {
   /// Shorthand for creating an inline story item from an image provider such as `AssetImage`
   /// or `NetworkImage`. However, the story continues to play while the image loads
   /// up.
-  factory StoryItem.inlineProviderImage(
-    ImageProvider image, {
-    Key? key,
-    Text? caption,
-    required Widget header,
-    Widget? footer,
-    bool shown = false,
-    bool roundedTop = true,
-    bool roundedBottom = false,
-    Duration? duration,
-  }) {
+  factory StoryItem.inlineProviderImage(ImageProvider image,
+      {Key? key, Text? caption, required Widget header, Widget? footer, bool shown = false, bool roundedTop = true, bool roundedBottom = false, Duration? duration, required String storyID}) {
     return StoryItem(
       Container(
         key: key,
@@ -389,6 +378,7 @@ class StoryItem {
           ),
         ),
       ),
+      storyID: storyID,
       header: header,
       footer: footer,
       shown: shown,
