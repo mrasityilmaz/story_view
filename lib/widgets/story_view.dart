@@ -650,13 +650,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                   widget.controller.pause();
                 },
                 onTapCancel: () {
-                  widget.controller.play();
                   setState(() {
                     widget.progressPosition = ProgressPosition.top;
                   });
+                  widget.controller.play();
                 },
                 onTapUp: (details) {
                   // if debounce timed out (not active) then continue anim
+                  setState(() {
+                    widget.progressPosition = ProgressPosition.top;
+                  });
                   if (_nextDebouncer?.isActive == false) {
                     widget.controller.play();
                   } else {
@@ -671,6 +674,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 onVerticalDragCancel: widget.onVerticalSwipeComplete == null
                     ? null
                     : () {
+                        setState(() {
+                          widget.progressPosition = ProgressPosition.top;
+                        });
                         widget.controller.play();
                       },
                 onVerticalDragUpdate: widget.onVerticalSwipeComplete == null
@@ -687,6 +693,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 onVerticalDragEnd: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
+                        setState(() {
+                          widget.progressPosition = ProgressPosition.top;
+                        });
                         widget.controller.play();
                         // finish up drag cycle
                         if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {
