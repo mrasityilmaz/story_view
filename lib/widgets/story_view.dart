@@ -642,7 +642,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(.4)),
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(.75)),
                   child: SafeArea(
                     bottom: false,
                     child: Column(
