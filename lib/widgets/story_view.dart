@@ -670,7 +670,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        Padding(padding: const EdgeInsets.symmetric(vertical: 12.0), child: _currentStory?.header),
+                        Padding(padding: const EdgeInsets.only(top: 12), child: _currentStory?.header),
                       ],
                     ),
                   )),
