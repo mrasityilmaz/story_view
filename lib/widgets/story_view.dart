@@ -245,8 +245,7 @@ class StoryItem {
                     width: double.infinity,
                     margin: EdgeInsets.only(bottom: 24),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
+                    color: caption != null ? Colors.black54 : Colors.transparent,
                     child: caption != null
                         ? Text(
                             caption,
@@ -301,8 +300,7 @@ class StoryItem {
                       horizontal: 24,
                       vertical: 8,
                     ),
-                    color:
-                        caption != null ? Colors.black54 : Colors.transparent,
+                    color: caption != null ? Colors.black54 : Colors.transparent,
                     child: caption != null
                         ? Text(
                             caption,
@@ -392,7 +390,7 @@ class StoryView extends StatefulWidget {
   final ValueChanged<StoryItem>? onStoryShow;
 
   /// Where the progress indicator should be placed.
-  final ProgressPosition progressPosition;
+  ProgressPosition progressPosition;
 
   /// Should the story be repeated forever?
   final bool repeat;
@@ -463,8 +461,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       });
     }
 
-    this._playbackSubscription =
-        widget.controller.playbackNotifier.listen((playbackStatus) {
+    this._playbackSubscription = widget.controller.playbackNotifier.listen((playbackStatus) {
       switch (playbackStatus) {
         case PlaybackState.play:
           _removeNextHold();
@@ -519,8 +516,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       widget.onStoryShow!(storyItem);
     }
 
-    _animationController =
-        AnimationController(duration: storyItem.duration, vsync: this);
+    _animationController = AnimationController(duration: storyItem.duration, vsync: this);
 
     _animationController!.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -534,8 +530,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       }
     });
 
-    _currentAnimation =
-        Tween(begin: 0.0, end: 1.0).animate(_animationController!);
+    _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController!);
 
     widget.controller.play();
   }
@@ -595,8 +590,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       }
     } else {
       // this is the last page, progress animation should skip to end
-      _animationController!
-          .animateTo(1.0, duration: Duration(milliseconds: 10));
+      _animationController!.animateTo(1.0, duration: Duration(milliseconds: 10));
     }
   }
 
@@ -625,9 +619,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
           Visibility(
             visible: widget.progressPosition != ProgressPosition.none,
             child: Align(
-              alignment: widget.progressPosition == ProgressPosition.top
-                  ? Alignment.topCenter
-                  : Alignment.bottomCenter,
+              alignment: widget.progressPosition == ProgressPosition.top ? Alignment.topCenter : Alignment.bottomCenter,
               child: SafeArea(
                 bottom: widget.inline ? false : true,
                 // we use SafeArea here for notched and bezeles phones
@@ -637,14 +629,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     vertical: 8,
                   ),
                   child: PageBar(
-                    widget.storyItems
-                        .map((it) => PageData(it!.duration, it.shown))
-                        .toList(),
+                    widget.storyItems.map((it) => PageData(it!.duration, it.shown)).toList(),
                     this._currentAnimation,
                     key: UniqueKey(),
-                    indicatorHeight: widget.inline
-                        ? IndicatorHeight.small
-                        : IndicatorHeight.large,
+                    indicatorHeight: widget.inline ? IndicatorHeight.small : IndicatorHeight.large,
                     indicatorColor: widget.indicatorColor,
                   ),
                 ),
@@ -656,10 +644,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               heightFactor: 1,
               child: GestureDetector(
                 onTapDown: (details) {
+                  setState(() {
+                    widget.progressPosition = ProgressPosition.none;
+                  });
                   widget.controller.pause();
                 },
                 onTapCancel: () {
                   widget.controller.play();
+                  setState(() {
+                    widget.progressPosition = ProgressPosition.top;
+                  });
                 },
                 onTapUp: (details) {
                   // if debounce timed out (not active) then continue anim
@@ -695,10 +689,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     : (details) {
                         widget.controller.play();
                         // finish up drag cycle
-                        if (!verticalDragInfo!.cancel &&
-                            widget.onVerticalSwipeComplete != null) {
-                          widget.onVerticalSwipeComplete!(
-                              verticalDragInfo!.direction);
+                        if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {
+                          widget.onVerticalSwipeComplete!(verticalDragInfo!.direction);
                         }
 
                         verticalDragInfo = null;
@@ -782,12 +774,10 @@ class PageBarState extends State<PageBar> {
       children: widget.pages.map((it) {
         return Expanded(
           child: Container(
-            padding: EdgeInsets.only(
-                right: widget.pages.last == it ? 0 : this.spacing),
+            padding: EdgeInsets.only(right: widget.pages.last == it ? 0 : this.spacing),
             child: StoryProgressIndicator(
               isPlaying(it) ? widget.animation!.value : (it.shown ? 1 : 0),
-              indicatorHeight:
-                  widget.indicatorHeight == IndicatorHeight.large ? 5 : 3,
+              indicatorHeight: widget.indicatorHeight == IndicatorHeight.large ? 5 : 3,
               indicatorColor: widget.indicatorColor,
             ),
           ),
@@ -838,11 +828,7 @@ class IndicatorOval extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..color = this.color;
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, 0, size.width * this.widthFactor, size.height),
-            Radius.circular(3)),
-        paint);
+    canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width * this.widthFactor, size.height), Radius.circular(3)), paint);
   }
 
   @override
@@ -856,16 +842,13 @@ class ContrastHelper {
   static double luminance(int? r, int? g, int? b) {
     final a = [r, g, b].map((it) {
       double value = it!.toDouble() / 255.0;
-      return value <= 0.03928
-          ? value / 12.92
-          : pow((value + 0.055) / 1.055, 2.4);
+      return value <= 0.03928 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4);
     }).toList();
 
     return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
   }
 
   static double contrast(rgb1, rgb2) {
-    return luminance(rgb2[0], rgb2[1], rgb2[2]) /
-        luminance(rgb1[0], rgb1[1], rgb1[2]);
+    return luminance(rgb2[0], rgb2[1], rgb2[2]) / luminance(rgb1[0], rgb1[1], rgb1[2]);
   }
 }
