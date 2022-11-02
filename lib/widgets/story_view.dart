@@ -679,7 +679,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 alignment: Alignment.centerRight,
                 heightFactor: 1,
                 child: GestureDetector(
-                  onTapDown: (details) {
+                  onLongPressDown: (details) {
                     if (widget.progressPosition == ProgressPosition.top) {
                       setState(() {
                         widget.progressPosition = ProgressPosition.none;
@@ -687,7 +687,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     }
                     widget.controller.pause();
                   },
-                  onTapCancel: () {
+                  onLongPressCancel: () {
                     if (widget.progressPosition == ProgressPosition.none) {
                       setState(() {
                         widget.progressPosition = ProgressPosition.top;
@@ -695,7 +695,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     }
                     widget.controller.play();
                   },
-                  onTapUp: (details) {
+                  onLongPressUp: () {
                     // if debounce timed out (not active) then continue anim
                     if (widget.progressPosition == ProgressPosition.none) {
                       setState(() {
