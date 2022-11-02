@@ -687,7 +687,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     }
                     widget.controller.pause();
                   },
-                  onTapCancel: () {
+                  onLongPressEnd: (details) {
                     if (widget.progressPosition == ProgressPosition.none) {
                       setState(() {
                         widget.progressPosition = ProgressPosition.top;
