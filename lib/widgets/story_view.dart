@@ -635,36 +635,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
         child: Stack(
           children: <Widget>[
             _currentView,
-            Visibility(
-              visible: widget.progressPosition != ProgressPosition.none,
-              child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(color: Colors.black.withOpacity(.75)),
-                  child: SafeArea(
-                    bottom: false,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Align(
-                          alignment: widget.progressPosition == ProgressPosition.top ? Alignment.topCenter : Alignment.bottomCenter,
-                          child: Container(
-                            child: PageBar(
-                              widget.storyItems.map((it) => PageData(it!.duration, it.shown)).toList(),
-                              this._currentAnimation,
-                              key: UniqueKey(),
-                              indicatorHeight: widget.inline ? IndicatorHeight.small : IndicatorHeight.large,
-                              indicatorColor: widget.indicatorColor,
-                            ),
-                          ),
-                        ),
-                        Padding(padding: const EdgeInsets.only(top: 12), child: _currentStory?.header),
-                      ],
-                    ),
-                  )),
-            ),
             Align(
                 alignment: Alignment.centerRight,
                 heightFactor: 1,
@@ -740,6 +710,36 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                     widget.controller.previous();
                   }),
                   width: 70),
+            ),
+            Visibility(
+              visible: widget.progressPosition != ProgressPosition.none,
+              child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(color: Colors.black.withOpacity(.75)),
+                  child: SafeArea(
+                    bottom: false,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Align(
+                          alignment: widget.progressPosition == ProgressPosition.top ? Alignment.topCenter : Alignment.bottomCenter,
+                          child: Container(
+                            child: PageBar(
+                              widget.storyItems.map((it) => PageData(it!.duration, it.shown)).toList(),
+                              this._currentAnimation,
+                              key: UniqueKey(),
+                              indicatorHeight: widget.inline ? IndicatorHeight.small : IndicatorHeight.large,
+                              indicatorColor: widget.indicatorColor,
+                            ),
+                          ),
+                        ),
+                        Padding(padding: const EdgeInsets.only(top: 12), child: _currentStory?.header),
+                      ],
+                    ),
+                  )),
             ),
             if (_currentStory?.footer != null)
               Visibility(
